@@ -16,9 +16,7 @@ int motorspeed = 0;
 boolean direction = 0; // 0 = opp, 1 = ned
 
 int upArr[] = {79, 80, 81, 82, 83, 84, 85};
-//int upArr[] = {60, 65, 70, 75, 80, 85, 90};
 int downArr[] = {104, 103, 102, 101, 100, 99, 98};
-//int downArr[] = {100, 105, 110, 115, 120, 125, 130};
 
 void setup() 
 { 
