@@ -1,5 +1,5 @@
 /*
- fløyen opp/ned med parallax servo/dc motor drivere på pin 2 og 3, sammen med potmeter på A4 og |A5
+ fløyen opp/ned med parallax servo/dc motor drivere på pin 2 og 3, sammen med potmeter på A4 og A5
 */
 
 #include <Servo.h>
@@ -15,16 +15,20 @@ const int motorstoptime = 5000; // hvor lang pause før retning snus
 int motorspeed = 0;
 boolean direction = 0; // 0 = opp, 1 = ned
 
-int upArr[] = {60, 65, 70, 75, 80, 85, 90};
-int downArr[] = {130, 125, 120, 115, 110, 105, 100};
+int upArr[] = {79, 80, 81, 82, 83, 84, 85};
+//int upArr[] = {60, 65, 70, 75, 80, 85, 90};
+int downArr[] = {104, 103, 102, 101, 100, 99, 98};
 //int downArr[] = {100, 105, 110, 115, 120, 125, 130};
 
 void setup()
 {
+  //delay(10000);
   myservo.attach(2);  // attaches the servo on pin 9 to the servo object
   myservo2.attach(3);  // attaches the servo on pin 9 to the servo object
   Serial.begin(9600);
   pinMode(led, OUTPUT);
+  myservo.write(90);
+  myservo2.write(90);
 }
 
 void loop()
@@ -70,8 +74,8 @@ void loop()
     Serial.println("Delay and stop before reversing");
     motorruntime = 0;
     // Stopper servoer/motorer
-    myservo.write(95);
-    myservo2.write(95);
+    myservo.write(90);
+    myservo2.write(90);
     delay(motorstoptime); // Pause hvis oppe eller nede
     // skifte retning
     if (direction) {
