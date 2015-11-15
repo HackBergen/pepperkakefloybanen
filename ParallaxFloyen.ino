@@ -27,6 +27,10 @@ boolean direction = false; // false = opp, true = ned
 int upArr[] = {79, 80, 81, 82, 83, 84, 85};
 int downArr[] = {104, 103, 102, 101, 100, 99, 98};
 
+const int upMotor = 85;
+const int downMotor = 98;
+const int stopMotor = 90;
+
 void setup() 
 { 
   //delay(10000);
@@ -36,8 +40,8 @@ void setup()
   pinMode(led, OUTPUT);
   pinMode(EndSensorA, INPUT);
   pinMode(EndSensorB, INPUT);
-  myservo.write(90);
-  myservo2.write(90); //stop motors
+  myservo.write(stopMotor);
+  myservo2.write(stopMotor); //stop motors
   
   //init both motors
   //both motors need to go into the up direction to hit the switches
@@ -54,23 +58,23 @@ void setup()
   
   if (!EndSensorA_active) 
   {
-    myservo.write(85);
+    myservo.write(upMotor);
   }
   if (!EndSensorB_active) {
-    myservo2.write(85);
+    myservo2.write(upMotor);
   }
   
   while (true)
   {
       if (digitalRead(EndSensorA))
       {
-         myservo.write(90);
+         myservo.write(stopMotor);
          EndSensorATrigger = true;
       }
       
       if (digitalRead(EndSensorB))
       {
-         myservo2.write(90);
+         myservo2.write(stopMotor);
          EndSensorBTrigger = true;
       }
       
@@ -78,17 +82,17 @@ void setup()
       {
         
         //when motors hit the sensors, go into the reverse direction for 2 seconds (same direction)
-        myservo.write(180);
-        myservo2.write(0);
+        myservo.write(downMotor);
+        myservo2.write(upMotor);
         delay(2000);
         
         //when 2 seconds has gone, stop motor 1, but keep it going for motor 2 for the next
         //40 seconds
-        myservo.write(90);
-        myservo2.write(0);
+        myservo.write(stopMotor);
+        myservo2.write(upMotor);
         delay(40000);
         //once motor 2 has gone 40 seconds, stop motor 2
-        myservo2.write(90);
+        myservo2.write(stopMotor);
         break; 
       }
       // wait until both triggers have been 
