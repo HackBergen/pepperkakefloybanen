@@ -1,13 +1,16 @@
-/* 
- fløyen opp/ned med parallax servo/dc motor drivere på pin 2 og 3, sammen med potmeter på A4 og A5
-*/ 
-
 #include <Servo.h> 
  
 Servo myservo;  // create servo object to control a servo 
 Servo myservo2;  // create servo object to control a servo 
                 // twelve servo objects can be created on most boards
  
+ 
+byte EndSensorA = 10;
+byte EndSensorB = 11;
+boolean EndSensorATrigger = false;
+boolean EndSensorBTrigger = false;
+
+
 int pos = 0;    // variable to store the servo position 
 int led = 13;
 int motorruntime = 0; // hvor lenge motor skal gå i en retning 
@@ -26,7 +29,48 @@ void setup()
   Serial.begin(9600);
   pinMode(led, OUTPUT);
   myservo.write(90);
-  myservo2.write(90);
+  myservo2.write(90); //stop motors
+  
+  
+  //init both motors
+   //both motors need to go into the up direction to hit the switches
+  myservo.write(0);
+  myservo2.write(0);
+  
+  while true
+  {
+      if digitalRead(EndSensorA)
+      {
+         myservo.write(90);
+         EndSensorATrigger = true;
+      }
+      if digitalRead(EndSensorB)
+      {
+         myservo2.write(90);
+         EndSensorBTrigger = true;
+      }
+      
+      if (EndSensorATrigger && EndSensorBTrigger)
+      {
+        
+        //when motors hit the sensors, go into the reverse direction for 2 seconds (same direction)
+        myservo.write(180);
+        myservo2.write(0);
+        delay(2000);
+        
+        //when 2 seconds has gone, stop motor 1, but keep it going for motor 2 for the next
+        //40 seconds
+        myservo.write(90);
+        myservo2.write(0);
+        delay(40000);
+        //once motor 2 has gone 40 seconds, stop motor 2
+        myservo2.write(90);
+        break; 
+      }
+      // wait until both triggers have been 
+  }
+  //motors are now initialised
+  
 } 
  
 void loop() 
@@ -54,7 +98,8 @@ void loop()
     Serial.println(" - up");
     myservo.write(upArr[speedval]);
     myservo2.write(upArr[speedval]);
-  } else 
+  } 
+  else 
   {
     Serial.print(motorruntime);
     Serial.print(" -> ");
@@ -64,9 +109,10 @@ void loop()
     myservo2.write(downArr[speedval]);
   }  
  
- 
   digitalWrite(led, LOW);    // turn the LED off by making the voltage LOW
-  delay(1000);
+  
+  
+  delay(1000); 
   motorruntime += 1;
   if (motorruntime > runtimeval) {
     Serial.println("Delay and stop before reversing");
@@ -81,4 +127,3 @@ void loop()
     } else { direction = 1; }
   }
 } 
-
