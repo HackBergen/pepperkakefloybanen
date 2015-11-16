@@ -57,7 +57,6 @@ void setup()
 boolean sync(){
   if(!topReachedBM)topReachedBM=topStatusBM;
   else myservo2.write(90);
-    
   
   if(!topReachedRH)topReachedRH=topStatusRH;
   else myservo.write(90);
@@ -69,7 +68,7 @@ boolean sync(){
 
 
 void printStatus(){
-  Serial.print("loop: ");
+  Serial.print("\rloop: ");
   Serial.print(motorruntime);
   Serial.print(". ");
   if(topStatusBM) Serial.print("Blaamann");
@@ -84,18 +83,21 @@ void printStatus(){
   
   Serial.print(" BM:");
   Serial.print(bm);
-  Serial.print("\r");
 }
+
+void readStatus(){
+  topStatusBM=digitalRead(topSensorBM);
+  topStatusRH=digitalRead(topSensorRH);
+}
+
 
 void loop()
 {
-  topStatusBM=digitalRead(topSensorBM);
-  topStatusRH=digitalRead(topSensorRH);
-
+  readStatus();
+  
   printStatus();
   if(sync()){
-    int runtimeval = goDownTime;//map(sensorValueA4, 0, 1023, 10, 40);
-    digitalWrite(led, HIGH);   // turn the LED on (HIGH is the voltage level)
+    int runtimeval = goDownTime;
     rh=90;
     bm=90;
     if (direction) {
@@ -109,12 +111,10 @@ void loop()
     myservo.write(rh);
     myservo2.write(bm);
 
-
-    digitalWrite(led, LOW);    // turn the LED off by making the voltage LOW
     delay(1000);
     motorruntime += 1;
     if (motorruntime > runtimeval && (topStatusBM||topStatusRH)) {
-      Serial.println("Delay and stop before reversing");
+      Serial.print("\rDelay and stop before reversing");
       motorruntime = 0;
       // Stopper servoer/motorer
       myservo.write(90);
