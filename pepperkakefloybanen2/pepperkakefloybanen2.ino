@@ -20,7 +20,6 @@ const long motorstoptime = 20*60; // hvor lang pause før retning snus
 
 int led = 13;
 int motorruntime = 0; // hvor lenge motor skal gå i en retning
-int motorspeed = 0;
 boolean direction = 0; // 0 = opp, 1 = ned
 
 int topSensorBM=6;
