@@ -56,18 +56,14 @@ void setup()
 
 boolean sync(){
   if(!topReachedBM)topReachedBM=topStatusBM;
-  else{
-    myservo2.write(90);
-    //Serial.println("Blaamann er oppe!");
-  }
+  else myservo2.write(90);
+    
+  
   if(!topReachedRH)topReachedRH=topStatusRH;
-  else{
-    myservo.write(90);
-    //Serial.println("Roedhette er oppe!");
-  }
-  if(topReachedBM && topReachedRH){
-    return 1;
-  }
+  else myservo.write(90);
+    
+  if(topReachedBM && topReachedRH) return 1;
+  
   return 0;
 }
 
@@ -98,45 +94,38 @@ void loop()
 
   printStatus();
   if(sync()){
-  int runtimeval = goDownTime;//map(sensorValueA4, 0, 1023, 10, 40);
-  digitalWrite(led, HIGH);   // turn the LED on (HIGH is the voltage level)
-  rh=90;
-  bm=90;
-  if (direction)
-  {
-    if(!topStatusRH && turn == 1)rh=upSpeedRH;
-    if(!topStatusBM && turn == 0)bm=upSpeedBM;
-  } else
-  { //Blamann goes DOWN
-    if(motorruntime <= runtimeval && turn == 1)rh=downSpeedRH;
-    if(motorruntime <= runtimeval && turn == 0)bm=downSpeedBM;
-    
-  }
-  Serial.print(motorruntime);
-  Serial.print(" Rodhette: ");
-  Serial.print(rh);
-  Serial.print(" Blaamann: ");
-  Serial.print(bm);
-  myservo.write(rh);
-  myservo2.write(bm);
-
-
-  digitalWrite(led, LOW);    // turn the LED off by making the voltage LOW
-  delay(1000);
-  motorruntime += 1;
-  if (motorruntime > runtimeval && (topStatusBM||topStatusRH)) {
-    Serial.println("Delay and stop before reversing");
-    motorruntime = 0;
-    // Stopper servoer/motorer
-    myservo.write(90);
-    myservo2.write(90);
-    delay(motorstoptime*1000); // Pause hvis oppe eller nede
-    // skifte retning
+    int runtimeval = goDownTime;//map(sensorValueA4, 0, 1023, 10, 40);
+    digitalWrite(led, HIGH);   // turn the LED on (HIGH is the voltage level)
+    rh=90;
+    bm=90;
     if (direction) {
-      direction = 0;
-      if(turn == 0)turn=1;
-      else turn=0;
-    } else { direction = 1; }
-  }
+      if(!topStatusRH && turn == 1)rh=upSpeedRH;
+      if(!topStatusBM && turn == 0)bm=upSpeedBM;
+    } else {
+      if(motorruntime <= runtimeval && turn == 1)rh=downSpeedRH;
+      if(motorruntime <= runtimeval && turn == 0)bm=downSpeedBM;
+    }
+  
+    myservo.write(rh);
+    myservo2.write(bm);
+
+
+    digitalWrite(led, LOW);    // turn the LED off by making the voltage LOW
+    delay(1000);
+    motorruntime += 1;
+    if (motorruntime > runtimeval && (topStatusBM||topStatusRH)) {
+      Serial.println("Delay and stop before reversing");
+      motorruntime = 0;
+      // Stopper servoer/motorer
+      myservo.write(90);
+      myservo2.write(90);
+      delay(motorstoptime*1000); // Pause hvis oppe eller nede
+      // skifte retning
+      if (direction) {
+        direction = 0;
+        if(turn == 0)turn=1;
+        else turn=0;
+      } else { direction = 1; }
+    }
   }
 }
