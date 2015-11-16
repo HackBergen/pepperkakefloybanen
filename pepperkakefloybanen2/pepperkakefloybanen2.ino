@@ -13,8 +13,8 @@ Servo myservo2;  // create servo object to control a servo
 // How many seconds should it go downwards (upwards movement controlled by sensor)
 int goDownTime=11*60;
 
-// How long break at the end station (milliseconds)?
-const long motorstoptime = 12000000; // hvor lang pause før retning snus
+// How long break at the end station (seconds)?
+const long motorstoptime = 20*60; // hvor lang pause før retning snus
 
 
 
@@ -122,7 +122,7 @@ void loop()
     // Stopper servoer/motorer
     myservo.write(90);
     myservo2.write(90);
-    delay(motorstoptime); // Pause hvis oppe eller nede
+    delay(motorstoptime*1000); // Pause hvis oppe eller nede
     // skifte retning
     if (direction) {
       direction = 0;
