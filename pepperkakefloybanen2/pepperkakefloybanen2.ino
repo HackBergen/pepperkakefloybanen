@@ -68,23 +68,27 @@ boolean sync(){
 }
 
 
-
-void loop()
-{
-  topStatusBM=digitalRead(topSensorBM);
-  topStatusRH=digitalRead(topSensorRH);
+void printStatus(){
   Serial.print(topStatusBM);
   Serial.print(topStatusRH);
   Serial.print(" ");
   Serial.print(turn);
   Serial.print("\r");
+}
+
+void loop()
+{
+  topStatusBM=digitalRead(topSensorBM);
+  topStatusRH=digitalRead(topSensorRH);
+
+  printStatus();
   if(sync()){
   int runtimeval = goDownTime;//map(sensorValueA4, 0, 1023, 10, 40);
   digitalWrite(led, HIGH);   // turn the LED on (HIGH is the voltage level)
 
   int rh=90;
   int bm=90;
-  if (direction) // Blamann goes UP
+  if (direction)
   {
     if(!topStatusRH && turn == 1)rh=upSpeedRH;
     if(!topStatusBM && turn == 0)bm=upSpeedBM;
