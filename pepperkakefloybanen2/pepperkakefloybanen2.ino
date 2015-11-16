@@ -11,10 +11,10 @@ Servo myservo2;  // create servo object to control a servo
 
 // Editable parameters
 // How many seconds should it go downwards (upwards movement controlled by sensor)
-int goDownTime=30;//11*60;
+int goDownTime=11*60;
 
 // How long break at the end station (milliseconds)?
-const int motorstoptime = 0;//20*60000; // hvor lang pause før retning snus
+const int motorstoptime = 20*60000; // hvor lang pause før retning snus
 
 
 
@@ -33,7 +33,7 @@ int topSensorBM=6;
 int topSensorRH=5;
 
 int downSpeedRH=98;
-int downSpeedBM=100;
+int downSpeedBM=99;
 
 int upSpeedRH=84;
 int upSpeedBM=84;
@@ -44,6 +44,8 @@ int topReachedBM=0;
 
 int topStatusRH=0;
 int topStatusBM=0;
+
+int turn=0;
 
 void setup()
 {
@@ -83,6 +85,8 @@ void loop()
   topStatusRH=digitalRead(topSensorRH);
   Serial.print(topStatusBM);
   Serial.print(topStatusRH);
+  Serial.print(" ");
+  Serial.print(turn);
   Serial.print("\r");
   if(sync()){
   int runtimeval = goDownTime;//map(sensorValueA4, 0, 1023, 10, 40);
@@ -92,12 +96,13 @@ void loop()
   int bm=90;
   if (direction) // Blamann goes UP
   {
-    if(motorruntime <= runtimeval)rh=downSpeedRH;
-    if(!topStatusBM)bm=upSpeedBM;
+    if(!topStatusRH && turn == 1)rh=upSpeedRH;
+    if(!topStatusBM && turn == 0)bm=upSpeedBM;
   } else
   { //Blamann goes DOWN
-    if(motorruntime <= runtimeval)bm=downSpeedBM;
-    if(!topStatusRH)rh=upSpeedRH;
+    if(motorruntime <= runtimeval && turn == 1)rh=downSpeedRH;
+    if(motorruntime <= runtimeval && turn == 0)bm=downSpeedBM;
+    
   }
   Serial.print(motorruntime);
   Serial.print(" Rodhette: ");
@@ -121,6 +126,8 @@ void loop()
     // skifte retning
     if (direction) {
       direction = 0;
+      if(turn == 0)turn=1;
+      else turn=0;
     } else { direction = 1; }
   }
   }
