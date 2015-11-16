@@ -14,7 +14,7 @@ Servo myservo2;  // create servo object to control a servo
 int goDownTime=11*60;
 
 // How long break at the end station (milliseconds)?
-const int motorstoptime = 20*60000; // hvor lang pause før retning snus
+const long motorstoptime = 12000000; // hvor lang pause før retning snus
 
 
 
