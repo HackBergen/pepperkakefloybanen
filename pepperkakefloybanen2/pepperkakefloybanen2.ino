@@ -31,7 +31,7 @@ int downSpeedBM=99;
 int upSpeedRH=84;
 int upSpeedBM=84;
 
-boolean topReachedRH=0;
+boolean topReachedRH=0; 
 boolean topReachedBM=0;
 
 
@@ -39,6 +39,10 @@ boolean topStatusRH=0;
 boolean topStatusBM=0;
 
 int turn=0;
+
+//Current speed
+int rh=90;
+int bm=90;
 
 void setup()
 {
@@ -69,10 +73,21 @@ boolean sync(){
 
 
 void printStatus(){
-  Serial.print(topStatusBM);
-  Serial.print(topStatusRH);
-  Serial.print(" ");
-  Serial.print(turn);
+  Serial.print("loop: ");
+  Serial.print(motorruntime);
+  Serial.print(". ");
+  if(topStatusBM) Serial.print("Blaamann");
+  if(topStatusBM && topStatusRH) Serial.print(" og ");
+  if(topStatusBM) Serial.print("Rodhette");
+  if(topStatusBM || topStatusRH) Serial.print(" er pa toppen, ");
+  if(turn) Serial.print("Rodhette kjorer");
+  else Serial.print("Blaamann kjorer");
+
+  Serial.print("; Motorer RH:");
+  Serial.print(rh);
+  
+  Serial.print(" BM:");
+  Serial.print(bm);
   Serial.print("\r");
 }
 
@@ -85,9 +100,8 @@ void loop()
   if(sync()){
   int runtimeval = goDownTime;//map(sensorValueA4, 0, 1023, 10, 40);
   digitalWrite(led, HIGH);   // turn the LED on (HIGH is the voltage level)
-
-  int rh=90;
-  int bm=90;
+  rh=90;
+  bm=90;
   if (direction)
   {
     if(!topStatusRH && turn == 1)rh=upSpeedRH;
