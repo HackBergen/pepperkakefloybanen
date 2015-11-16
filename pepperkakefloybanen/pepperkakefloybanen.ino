@@ -29,8 +29,8 @@ int upArr[] = {79, 80, 81, 82, 83, 84, 85};
 int downArr[] = {104, 103, 102, 101, 100, 99, 98};
 //int downArr[] = {100, 105, 110, 115, 120, 125, 130};
 
-int topSensorBM=5;
-int topSensorRH=6;
+int topSensorBM=6;
+int topSensorRH=5;
 
 int downSpeedRH=99;
 int downSpeedBM=84;
@@ -54,7 +54,7 @@ void setup()
   pinMode(led, OUTPUT);
   //myservo.write(90);
   //myservo2.write(90);
-  myservo.write(upSpeedRH);
+  myservo.write(downSpeedRH);
   myservo2.write(upSpeedBM); //Blaamann
 }
 
