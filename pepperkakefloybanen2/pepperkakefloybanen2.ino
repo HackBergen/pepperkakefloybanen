@@ -18,7 +18,6 @@ const long motorstoptime = 20*60; // hvor lang pause før retning snus
 
 
 
-int pos = 0;    // variable to store the servo position
 int led = 13;
 int motorruntime = 0; // hvor lenge motor skal gå i en retning
 int motorspeed = 0;
