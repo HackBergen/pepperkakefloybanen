@@ -88,6 +88,7 @@ void printStatus(){
 void readStatus(){
   topStatusBM=digitalRead(topSensorBM);
   topStatusRH=digitalRead(topSensorRH);
+  motorruntime += 1;
 }
 
 
@@ -110,9 +111,7 @@ void loop()
   
     myservo.write(rh);
     myservo2.write(bm);
-
     delay(1000);
-    motorruntime += 1;
     if (motorruntime > runtimeval && (topStatusBM||topStatusRH)) {
       Serial.print("\rDelay and stop before reversing");
       motorruntime = 0;
